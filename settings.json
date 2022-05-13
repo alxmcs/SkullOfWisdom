@@ -1,6 +1,7 @@
 {
   "encodings_path": "encodings.pickle",
   "images_path": "images",
+  "timeout": 5.0,
   "phrases_list": [
     "Привет {x}",
     "{x} здар'ова заеб'ал",
@@ -14,5 +15,6 @@
     "Под этим солнцем и небом мы тепло приветствуем тебя {x}"
   ],
   "replace_symbol": "{x}",
-  "unknown_name": "неустановленный пидар'ас"
+  "unknown_name": "неустановленный пидар'ас",
+  "startup_message": "я родился"
 }
