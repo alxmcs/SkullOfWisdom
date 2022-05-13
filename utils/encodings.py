@@ -12,14 +12,15 @@ def generate_encodings(image_folder, encodings_path):
     encodings = []
     names = []
     if os.path.exists(encodings_path) and os.stat(encodings_path).st_size != 0:
-        data = pickle.loads(open(encodings_path, "rb").read())
+        with open(encodings_path, "rb") as file:
+            data = pickle.loads(file.read())
         encodings = data["names"]
         names = data["encodings"]
     for (i, image_path) in enumerate(image_paths):
         new_name = os.path.splitext(os.path.basename(image_path))[0]
 
-        f = open(image_path, "rb")
-        chunk = f.read()
+        with open(image_path, "rb") as f:
+            chunk = f.read()
         chunk_arr = np.frombuffer(chunk, dtype=np.uint8)
         image = cv2.imdecode(chunk_arr, cv2.IMREAD_COLOR)
 

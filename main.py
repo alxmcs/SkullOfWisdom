@@ -24,7 +24,8 @@ class PiButler:
         self._shutdown_message = settings['shutdown_message']
         self._error_message = settings['error_message']
         logging.info('Settings read')
-        self.__data = pickle.loads(open(settings['encodings_path'], "rb").read())
+        with open(settings['encodings_path'], "rb") as file:
+            self.__data = pickle.loads(file.read())
         logging.info('Encodings read')
         self.__emitter = VoiceEmitter(settings['phrases_list'], settings['unknown_name'], settings['replace_symbol'])
         self.__emitter.play_message(settings['startup_message'])
