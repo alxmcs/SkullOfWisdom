@@ -2,15 +2,19 @@ from imutils.video import VideoStream
 import imutils
 import time
 import pickle
-from utils.voice import VoiceEmitter, UNIDENTIFIED_NAME
-from utils.encodings import ENCODINGS_PATH
+import json
+from utils.voice import VoiceEmitter
 import face_recognition
+
+SETTINGS_PATH = 'settings.json'
 
 
 class PiButler:
-    def __init__(self, path):
-        self.__data = pickle.loads(open(path, "rb").read())
-        self.__emitter = VoiceEmitter()
+    def __init__(self, settings_path):
+        with open(settings_path, encoding="utf-8") as json_file:
+            settings = json.load(json_file)
+        self.__data = pickle.loads(open(settings['encodings_path'], "rb").read())
+        self.__emitter = VoiceEmitter(settings['phrases_list'], settings['unknown_name'], settings['replace_symbol'])
         self.__vs = VideoStream(src=0).start()
 
     def run_camera(self):
@@ -31,10 +35,10 @@ class PiButler:
                     name = max(counts, key=counts.get)
                     self.__emitter.play_greeting(name)
                 else:
-                    self.__emitter.play_greeting(UNIDENTIFIED_NAME)
+                    self.__emitter.play_greeting(None)
             time.sleep(5.0)
 
 
 if __name__ == "__main__":
-    butler = PiButler(ENCODINGS_PATH)
+    butler = PiButler(SETTINGS_PATH)
     butler.run_camera()

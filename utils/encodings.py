@@ -1,12 +1,10 @@
 from imutils import paths
 import face_recognition
+import numpy as np
 import pickle
+import json
 import cv2
 import os
-import numpy as np
-
-IMAGE_FOLDER = "images"
-ENCODINGS_PATH = "encodings.pickle"
 
 
 def generate_encodings(image_folder, encodings_path):
@@ -37,6 +35,8 @@ def generate_encodings(image_folder, encodings_path):
 
 
 if __name__ == "__main__":
-    generate_encodings(os.path.join(os.path.dirname(os.getcwd()), IMAGE_FOLDER),
-                       os.path.join(os.path.dirname(os.getcwd()), ENCODINGS_PATH))
+    with open(os.path.join(os.path.dirname(os.getcwd()), 'settings.json'), encoding="utf-8") as json_file:
+        settings = json.load(json_file)
+    generate_encodings(os.path.join(os.path.dirname(os.getcwd()), settings['images_path']),
+                       os.path.join(os.path.dirname(os.getcwd()), settings['encodings_path']))
 

@@ -1,24 +1,16 @@
-import pyttsx3
 import numpy as np
-
-PHRASES = [
-    "Привет {x}",
-    "{x} здар'ова заеб'ал",
-    "Тебе тут не рады {x}",
-    "Шал'ом {x}",
-    "Здар'ова {x} как сам",
-    "О, это же {x}. Прав'аливай отсюда",
-    "Здравствуйте {x}",
-    "{x} моё почтение",
-    "Cал'ам {x} брат'уха жи да"
-]
-UNIDENTIFIED_NAME = "неустановленный пидар'ас"
+import pyttsx3
+import json
+import os
 
 
 class VoiceEmitter:
-    def __init__(self, volume=1.0):
+    def __init__(self, phrases, unknown, symbol, volume=1.0):
         self.__engine = pyttsx3.init()
-        self.__engine.setProperty('volume', volume)  
+        self.__phrases = phrases
+        self.__unknown = unknown
+        self.__replace_symbol = symbol
+        self.__engine.setProperty('volume', volume)
         voices = self.__engine.getProperty('voices')
         self.__engine.setProperty('voice', voices[0].id)
 
@@ -27,11 +19,15 @@ class VoiceEmitter:
         self.__engine.runAndWait()
 
     def play_greeting(self, name):
-        self.play_message(np.random.choice(PHRASES, 1)[0].replace('{x}', name))
+        if name is None:
+            name = self.__unknown
+        self.play_message(np.random.choice(self.__phrases, 1)[0].replace('{x}', name))
 
 
 if __name__ == "__main__":
-    ve = VoiceEmitter()
+    with open(os.path.join(os.path.dirname(os.getcwd()), 'settings.json'), encoding="utf-8") as json_file:
+        settings = json.load(json_file)
+    ve = VoiceEmitter(settings['phrases_list'], settings['unknown_name'], settings['replace_symbol'])
     ve.play_greeting('Лёха')
     ve.play_greeting('Саня')
     ve.play_greeting('Настя')
@@ -39,4 +35,4 @@ if __name__ == "__main__":
     ve.play_greeting('Роман')
     ve.play_greeting('Паша')
     ve.play_greeting('Артём')
-    ve.play_greeting(UNIDENTIFIED_NAME)
+    ve.play_greeting(None)
