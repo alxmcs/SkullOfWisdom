@@ -41,7 +41,8 @@ class PiButler:
                 frame = imutils.resize(frame, width=500)
                 boxes = face_recognition.face_locations(frame)
                 encodings = face_recognition.face_encodings(frame, boxes)
-                logging.info(f'got {boxes.count()} faces')
+                if boxes is not None and len(boxes) != 0:
+                    logging.info(f'got {len(boxes)} faces')
                 for encoding in encodings:
                     matches = face_recognition.compare_faces(self.__data["encodings"], encoding)
                     if True in matches:
@@ -63,7 +64,7 @@ class PiButler:
                 break
             except Exception as ex:
                 self.__emitter.play_message(self._error_message)
-                logging.error(f'Exception during face recognition loop: {ex}')
+                logging.error(f'Exception happened during face recognition loop: {ex}')
                 break
 
 
