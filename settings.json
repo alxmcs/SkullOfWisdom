@@ -16,5 +16,7 @@
   ],
   "replace_symbol": "{x}",
   "unknown_name": "неустановленный пидар'ас",
-  "startup_message": "я родился"
+  "startup_message": "я родился",
+  "shutdown_message": "счастливо оставаться педики",
+  "error_message": "мне хуйово"
 }

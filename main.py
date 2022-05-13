@@ -21,6 +21,8 @@ class PiButler:
         with open(settings_path, encoding="utf-8") as json_file:
             settings = json.load(json_file)
         self.__timeout = settings['timeout']
+        self._shutdown_message = settings['shutdown_message']
+        self._error_message = settings['error_message']
         logging.info('Settings read')
         self.__data = pickle.loads(open(settings['encodings_path'], "rb").read())
         logging.info('Encodings read')
@@ -30,31 +32,41 @@ class PiButler:
         self.__vs = VideoStream(src=0).start()
         logging.info('Video stream capture started')
 
-    def run_camera(self):
+    def run_face_recognition(self):
         time.sleep(2.0)
+        logging.info('Began face recognition loop')
         while True:
-            frame = self.__vs.read()
-            frame = imutils.resize(frame, width=500)
-            boxes = face_recognition.face_locations(frame)
-            encodings = face_recognition.face_encodings(frame, boxes)
-            logging.info(f'got {boxes.count()} faces')
-            for encoding in encodings:
-                matches = face_recognition.compare_faces(self.__data["encodings"], encoding)
-                if True in matches:
-                    matched = [i for (i, b) in enumerate(matches) if b]
-                    counts = {}
-                    for i in matched:
-                        name = self.__data["names"][i]
-                        counts[name] = counts.get(name, 0) + 1
-                    name = max(counts, key=counts.get)
-                    self.__emitter.play_greeting(name)
-                    logging.info(f'recognized {name}')
-                else:
-                    self.__emitter.play_greeting(None)
-                    logging.info('unknown person appeared')
-            time.sleep(self.__timeout)
+            try:
+                frame = self.__vs.read()
+                frame = imutils.resize(frame, width=500)
+                boxes = face_recognition.face_locations(frame)
+                encodings = face_recognition.face_encodings(frame, boxes)
+                logging.info(f'got {boxes.count()} faces')
+                for encoding in encodings:
+                    matches = face_recognition.compare_faces(self.__data["encodings"], encoding)
+                    if True in matches:
+                        matched = [i for (i, b) in enumerate(matches) if b]
+                        counts = {}
+                        for i in matched:
+                            name = self.__data["names"][i]
+                            counts[name] = counts.get(name, 0) + 1
+                        name = max(counts, key=counts.get)
+                        self.__emitter.play_greeting(name)
+                        logging.info(f'recognized {name}')
+                    else:
+                        self.__emitter.play_greeting(None)
+                        logging.info('unknown person appeared')
+                time.sleep(self.__timeout)
+            except KeyboardInterrupt:
+                self.__emitter.play_message(self._shutdown_message)
+                logging.info('Stopped face recognition loop')
+                break
+            except Exception as ex:
+                self.__emitter.play_message(self._error_message)
+                logging.error(f'Exception during face recognition loop: {ex}')
+                break
 
 
 if __name__ == "__main__":
     butler = PiButler(SETTINGS_PATH)
-    butler.run_camera()
+    butler.run_face_recognition()
