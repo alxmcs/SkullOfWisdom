@@ -2,13 +2,14 @@ import numpy as np
 import pyttsx3
 import json
 import os
-import subprocess
+
 
 class VoiceEmitter:
-    def __init__(self, phrases, unknown, symbol, volume=1.0):
-        self.__phrases = phrases
+    def __init__(self, greetings, unknown, symbol, prophesies, volume=1.0):
+        self.__greetings = greetings
         self.__unknown = unknown
         self.__replace_symbol = symbol
+        self.__prophesies = prophesies
         if os.name == 'nt':
             self.__engine = pyttsx3.init()
             self.__engine.setProperty('volume', volume)
@@ -20,14 +21,16 @@ class VoiceEmitter:
             self.__engine.say(text)
             self.__engine.runAndWait()
         else:
-            bash = f'echo "{text}" | festival --tts --language russian'
-            process = subprocess.Popen(bash.split(), stdout=subprocess.PIPE)
-            output, error = process.communicate()
+            bash = f'echo \"{text}\" | festival --tts --language russian'
+            os.system(bash)
 
     def play_greeting(self, name):
         if name is None:
             name = self.__unknown
-        self.play_message(np.random.choice(self.__phrases, 1)[0].replace('{x}', name))
+        self.play_message(np.random.choice(self.__greetings, 1)[0].replace('{x}', name))
+
+    def play_prophecy(self):
+        self.play_message(np.random.choice(self.__prophesies, 1)[0])
 
 
 if __name__ == "__main__":

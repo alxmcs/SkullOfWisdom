@@ -27,7 +27,8 @@ class PiButler:
         with open(settings['encodings_path'], "rb") as file:
             self.__data = pickle.loads(file.read())
         logging.info('Encodings read')
-        self.__emitter = VoiceEmitter(settings['phrases_list'], settings['unknown_name'], settings['replace_symbol'])
+        self.__emitter = VoiceEmitter(settings['phrases_list'], settings['unknown_name'],
+                                      settings['replace_symbol'], settings['prophecies_list'])
         self.__emitter.play_message(settings['startup_message'])
         logging.info('Text-to-speech initialized')
         self.__vs = VideoStream(src=0).start()
@@ -52,6 +53,7 @@ class PiButler:
             else:
                 self.__emitter.play_greeting(None)
                 logging.info('unknown person appeared')
+            self.__emitter.play_prophecy()
 
     def process_stream(self):
         time.sleep(2.0)
