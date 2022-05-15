@@ -2,25 +2,27 @@ import numpy as np
 import pyttsx3
 import json
 import os
-
+import subprocess
 
 class VoiceEmitter:
     def __init__(self, phrases, unknown, symbol, volume=1.0):
-        self.__engine = pyttsx3.init()
         self.__phrases = phrases
         self.__unknown = unknown
         self.__replace_symbol = symbol
-        self.__engine.setProperty('volume', volume)
-        voices = self.__engine.getProperty('voices')
         if os.name == 'nt':
+            self.__engine = pyttsx3.init()
+            self.__engine.setProperty('volume', volume)
+            voices = self.__engine.getProperty('voices')
             self.__engine.setProperty('voice', voices[0].id)
-        else:
-            self.__engine.setProperty('rate', 100)
-            self.__engine.setProperty('voice', next((x for x in voices if x.id == 'russian'), None).id)
 
     def play_message(self, text):
-        self.__engine.say(text)
-        self.__engine.runAndWait()
+        if os.name == 'nt':
+            self.__engine.say(text)
+            self.__engine.runAndWait()
+        else:
+            bash = f'echo "{text}" | festival --tts --language russian'
+            process = subprocess.Popen(bash.split(), stdout=subprocess.PIPE)
+            output, error = process.communicate()
 
     def play_greeting(self, name):
         if name is None:
