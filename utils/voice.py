@@ -12,7 +12,11 @@ class VoiceEmitter:
         self.__replace_symbol = symbol
         self.__engine.setProperty('volume', volume)
         voices = self.__engine.getProperty('voices')
-        self.__engine.setProperty('voice', voices[0].id)
+        if os.name == 'nt':
+            self.__engine.setProperty('voice', voices[0].id)
+        else:
+            self.__engine.setProperty('rate', 100)
+            self.__engine.setProperty('voice', next((x for x in voices if x.id == 'russian'), None).id)
 
     def play_message(self, text):
         self.__engine.say(text)
