@@ -6,14 +6,15 @@ import imutils
 import pickle
 import json
 import time
+import sys
 
 SETTINGS_PATH = 'settings.json'
 
 
 class PiButler:
     def __init__(self, settings_path):
-        logging.basicConfig(handlers=[logging.FileHandler(filename="PiButler.log",
-                                                          encoding='utf-8', mode='a+')],
+        logging.basicConfig(handlers=[logging.StreamHandler(sys.stdout),
+                                      logging.FileHandler(filename="PiButler.log", encoding='utf-8', mode='a+')],
                             format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
                             datefmt="%m/%d/%Y %I:%M:%S",
                             level=logging.INFO)
