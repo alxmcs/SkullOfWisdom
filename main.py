@@ -7,6 +7,7 @@ import pickle
 import json
 import time
 import sys
+import os
 
 SETTINGS_PATH = 'settings.json'
 
@@ -32,7 +33,10 @@ class PiButler:
                                       settings['replace_symbol'], settings['prophecies_list'])
         self.__emitter.play_message(settings['startup_message'])
         logging.info('Text-to-speech initialized')
-        self.__vs = VideoStream(src=0).start()
+        src = 0
+        if os.name == 'nt':
+            src = 1
+        self.__vs = VideoStream(src=src).start()
         logging.info('Video stream capture started')
 
     def process_frame(self, frame):
