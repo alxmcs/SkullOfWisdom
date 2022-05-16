@@ -6,14 +6,15 @@ import imutils
 import pickle
 import json
 import time
+import sys
 
 SETTINGS_PATH = 'settings.json'
 
 
 class PiButler:
     def __init__(self, settings_path):
-        logging.basicConfig(handlers=[logging.FileHandler(filename="PiButler.log",
-                                                          encoding='utf-8', mode='a+')],
+        logging.basicConfig(handlers=[logging.StreamHandler(sys.stdout),
+                                      logging.FileHandler(filename="PiButler.log", encoding='utf-8', mode='a+')],
                             format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
                             datefmt="%m/%d/%Y %I:%M:%S",
                             level=logging.INFO)
@@ -27,7 +28,8 @@ class PiButler:
         with open(settings['encodings_path'], "rb") as file:
             self.__data = pickle.loads(file.read())
         logging.info('Encodings read')
-        self.__emitter = VoiceEmitter(settings['phrases_list'], settings['unknown_name'], settings['replace_symbol'])
+        self.__emitter = VoiceEmitter(settings['phrases_list'], settings['unknown_name'],
+                                      settings['replace_symbol'], settings['prophecies_list'])
         self.__emitter.play_message(settings['startup_message'])
         logging.info('Text-to-speech initialized')
         self.__vs = VideoStream(src=0).start()
@@ -52,6 +54,7 @@ class PiButler:
             else:
                 self.__emitter.play_greeting(None)
                 logging.info('unknown person appeared')
+            self.__emitter.play_prophecy()
 
     def process_stream(self):
         time.sleep(2.0)

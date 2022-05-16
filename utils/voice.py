@@ -5,23 +5,32 @@ import os
 
 
 class VoiceEmitter:
-    def __init__(self, phrases, unknown, symbol, volume=1.0):
-        self.__engine = pyttsx3.init()
-        self.__phrases = phrases
+    def __init__(self, greetings, unknown, symbol, prophesies, volume=1.0):
+        self.__greetings = greetings
         self.__unknown = unknown
         self.__replace_symbol = symbol
-        self.__engine.setProperty('volume', volume)
-        voices = self.__engine.getProperty('voices')
-        self.__engine.setProperty('voice', voices[0].id)
+        self.__prophesies = prophesies
+        if os.name == 'nt':
+            self.__engine = pyttsx3.init()
+            self.__engine.setProperty('volume', volume)
+            voices = self.__engine.getProperty('voices')
+            self.__engine.setProperty('voice', voices[0].id)
 
     def play_message(self, text):
-        self.__engine.say(text)
-        self.__engine.runAndWait()
+        if os.name == 'nt':
+            self.__engine.say(text)
+            self.__engine.runAndWait()
+        else:
+            bash = f'echo \"{text}\" | festival --tts --language russian'
+            os.system(bash)
 
     def play_greeting(self, name):
         if name is None:
             name = self.__unknown
-        self.play_message(np.random.choice(self.__phrases, 1)[0].replace('{x}', name))
+        self.play_message(np.random.choice(self.__greetings, 1)[0].replace('{x}', name))
+
+    def play_prophecy(self):
+        self.play_message(np.random.choice(self.__prophesies, 1)[0])
 
 
 if __name__ == "__main__":
