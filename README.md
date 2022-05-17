@@ -1,8 +1,8 @@
 # Skull Of Wisdom
 Примитивная text-to-speech игрушка на основе Raspberry Pi, использующая экодинги лиц.
 <p float="left">
- <img src="https://user-images.githubusercontent.com/70561974/168880886-5978e5cb-1007-4ceb-a523-d9ca04b95042.png" width="500"/>
-<img src="https://user-images.githubusercontent.com/70561974/168880908-c9c0a72a-1d3d-41d0-a715-57d472213c42.png" width="500"/>
+ <img src="https://user-images.githubusercontent.com/70561974/168880886-5978e5cb-1007-4ceb-a523-d9ca04b95042.png" width="400"/>
+<img src="https://user-images.githubusercontent.com/70561974/168880908-c9c0a72a-1d3d-41d0-a715-57d472213c42.png" width="400"/>
 </p>
 
 ## Функционал
