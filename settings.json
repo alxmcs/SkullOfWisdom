@@ -1,6 +1,7 @@
 {
   "encodings_path": "encodings.pickle",
   "images_path": "images",
+  "names_path": "images/names.json",
   "timeout": 5.0,
   "phrases_list": [
     "Привет {x}",
