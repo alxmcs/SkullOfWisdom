@@ -45,3 +45,4 @@ if __name__ == "__main__":
     ve.play_greeting('Паша')
     ve.play_greeting('Артём')
     ve.play_greeting(None)
+    ve.play_prophecy()

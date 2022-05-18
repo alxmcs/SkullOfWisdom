@@ -11,10 +11,10 @@ import sys
 SETTINGS_PATH = 'settings.json'
 
 
-class PiButler:
+class StreamWorker:
     def __init__(self, settings_path):
         logging.basicConfig(handlers=[logging.StreamHandler(sys.stdout),
-                                      logging.FileHandler(filename="PiButler.log", encoding='utf-8', mode='a+')],
+                                      logging.FileHandler(filename="VideoStream.log", encoding='utf-8', mode='a+')],
                             format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
                             datefmt="%m/%d/%Y %I:%M:%S",
                             level=logging.INFO)
@@ -75,5 +75,5 @@ class PiButler:
 
 
 if __name__ == "__main__":
-    butler = PiButler(SETTINGS_PATH)
+    butler = StreamWorker(SETTINGS_PATH)
     butler.process_stream()
