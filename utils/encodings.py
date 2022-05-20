@@ -5,6 +5,7 @@ import logging
 import pickle
 import json
 import cv2
+import sys
 import os
 
 EXTENSIONS = ['.jpg', '.png', '.bmp', '.gif', '.tiff']
