@@ -15,6 +15,7 @@ class VoiceEmitter:
             self.__engine.setProperty('volume', volume)
             voices = self.__engine.getProperty('voices')
             self.__engine.setProperty('voice', voices[0].id)
+        np.random.seed(420)
 
     def play_message(self, text):
         if os.name == 'nt':
@@ -29,8 +30,17 @@ class VoiceEmitter:
             name = self.__unknown
         self.play_message(np.random.choice(self.__greetings, 1)[0].replace('{x}', name))
 
-    def play_prophecy(self):
-        self.play_message(np.random.choice(self.__prophesies, 1)[0])
+    def play_prophecy(self, lottery):
+        if lottery:
+            index = np.random.choice(len(self.__prophesies), 1)[0]
+            self.play_message(self.__prophesies[index])
+            if index == 0:
+                return False
+            else:
+                return True
+        else:
+            self.play_message(np.random.choice(self.__prophesies[1:], 1)[0])
+            return False
 
 
 if __name__ == "__main__":

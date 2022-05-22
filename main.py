@@ -35,7 +35,8 @@ class StreamWorker:
         self.__vs = VideoStream(src=0).start()
         logging.info('Video stream capture started')
 
-    def process_frame(self, frame):
+    def process_frame(self, frame, lottery):
+        result = lottery
         boxes = face_recognition.face_locations(frame)
         encodings = face_recognition.face_encodings(frame, boxes)
         if boxes is not None and len(boxes) != 0:
@@ -53,16 +54,19 @@ class StreamWorker:
                 logging.info(f'recognized {name}')
             else:
                 self.__emitter.play_greeting(None)
-                logging.info('unknown person appeared')
-            self.__emitter.play_prophecy()
+                logging.info('Unknown person appeared')
+            result = self.__emitter.play_prophecy(lottery)
+            logging.info(f'Lottery is enabled: {result}')
+        return result
 
     def process_stream(self):
+        lottery = True
         time.sleep(2.0)
         logging.info('Began face recognition loop')
         while True:
             try:
                 frame = self.__vs.read()
-                self.process_frame(imutils.resize(frame, width=500))
+                lottery = self.process_frame(imutils.resize(frame, width=500), lottery)
                 time.sleep(self.__timeout)
             except KeyboardInterrupt:
                 self.__emitter.play_message(self._shutdown_message)
