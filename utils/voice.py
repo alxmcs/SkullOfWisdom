@@ -15,7 +15,7 @@ class VoiceEmitter:
             self.__engine.setProperty('volume', volume)
             voices = self.__engine.getProperty('voices')
             self.__engine.setProperty('voice', voices[0].id)
-        np.random.seed(420)
+        #np.random.seed(420)
 
     def play_message(self, text):
         if os.name == 'nt':
