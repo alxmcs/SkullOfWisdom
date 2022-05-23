@@ -29,14 +29,25 @@ class VoiceEmitter:
             name = self.__unknown
         self.play_message(np.random.choice(self.__greetings, 1)[0].replace('{x}', name))
 
-    def play_prophecy(self):
-        self.play_message(np.random.choice(self.__prophesies, 1)[0])
+    def play_prophecy(self, lottery):
+        if lottery:
+            index = np.random.choice(len(self.__prophesies), 1)[0]
+            self.play_message(self.__prophesies[index])
+            if index == 0:
+                return False
+            else:
+                return True
+        else:
+            self.play_message(np.random.choice(self.__prophesies[1:], 1)[0])
+            return False
 
 
 if __name__ == "__main__":
     with open(os.path.join(os.path.dirname(os.getcwd()), 'settings.json'), encoding="utf-8") as json_file:
         settings = json.load(json_file)
-    ve = VoiceEmitter(settings['phrases_list'], settings['unknown_name'], settings['replace_symbol'])
+    ve = VoiceEmitter(settings['phrases_list'], settings['unknown_name'],
+                      settings['replace_symbol'], settings['prophecies_list'])
+    ve.play_message(settings['prophecies_list'][-1])
     ve.play_greeting('Лёха')
     ve.play_greeting('Саня')
     ve.play_greeting('Настя')
@@ -45,3 +56,4 @@ if __name__ == "__main__":
     ve.play_greeting('Паша')
     ve.play_greeting('Артём')
     ve.play_greeting(None)
+    ve.play_prophecy(True)
