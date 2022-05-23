@@ -15,7 +15,6 @@ class VoiceEmitter:
             self.__engine.setProperty('volume', volume)
             voices = self.__engine.getProperty('voices')
             self.__engine.setProperty('voice', voices[0].id)
-        #np.random.seed(420)
 
     def play_message(self, text):
         if os.name == 'nt':
@@ -46,7 +45,9 @@ class VoiceEmitter:
 if __name__ == "__main__":
     with open(os.path.join(os.path.dirname(os.getcwd()), 'settings.json'), encoding="utf-8") as json_file:
         settings = json.load(json_file)
-    ve = VoiceEmitter(settings['phrases_list'], settings['unknown_name'], settings['replace_symbol'])
+    ve = VoiceEmitter(settings['phrases_list'], settings['unknown_name'],
+                      settings['replace_symbol'], settings['prophecies_list'])
+    ve.play_message(settings['prophecies_list'][-1])
     ve.play_greeting('Лёха')
     ve.play_greeting('Саня')
     ve.play_greeting('Настя')
@@ -55,4 +56,4 @@ if __name__ == "__main__":
     ve.play_greeting('Паша')
     ve.play_greeting('Артём')
     ve.play_greeting(None)
-    ve.play_prophecy()
+    ve.play_prophecy(True)
