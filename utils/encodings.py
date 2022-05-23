@@ -21,7 +21,7 @@ def generate_encodings(image_folder, names_path, encodings_path):
                         level=logging.INFO)
     encodings = []
     names = []
-    image_paths = list(p for p in paths.list_images(image_folder) if os.path.splitext(p)[1] in EXTENSIONS)
+    image_paths = [p for p in paths.list_images(image_folder) if os.path.splitext(p)[1] in EXTENSIONS]
     logging.info(f'Got {len(image_paths)} paths to images')
     with open(names_path, encoding='utf-8') as json_file:
         names_dict = json.loads(json_file.read())
