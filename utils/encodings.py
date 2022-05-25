@@ -32,7 +32,7 @@ def generate_encodings(image_folder, names_path, encodings_path):
             data = pickle.loads(pickle_file.read())
         encodings = data["names"]
         names = data["encodings"]
-        logging.info(f'Got {len(encodings)} encodings for {len(set(names))} people from {encodings_path}')
+        logging.info(f'Got {len(encodings)} encodings for {len(set(np.array(names).flatten()))} people from {encodings_path}')
 
     for (i, image_path) in enumerate(image_paths):
         if os.path.splitext(os.path.basename(image_path))[0] in names_dict.keys():
@@ -51,7 +51,7 @@ def generate_encodings(image_folder, names_path, encodings_path):
 
     with open(encodings_path, "wb") as pickle_file:
         pickle.dump({"encodings": encodings, "names": names}, pickle_file)
-    logging.info(f'{len(encodings)} encodings for {len(set(names))} people saved in {encodings_path}')
+    logging.info(f'{len(encodings)} encodings for {len(set(np.array(names).flatten()))} people saved in {encodings_path}')
 
 
 if __name__ == "__main__":
