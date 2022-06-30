@@ -4,8 +4,9 @@ import os
 from telethon.tl.functions.contacts import ResolveUsernameRequest
 
 class HoroscopeRequester:
-    def __init__(self, base_url, error_message):
+    def __init__(self, base_url, error_message, replace_symbol):
         self.__base_url = base_url
+        self.__replace_symbol = replace_symbol
         self._error_message = error_message
 
     def request_horoscope(self, sign):
@@ -13,7 +14,7 @@ class HoroscopeRequester:
         if response.status_code == 200:
             return response.json()['horoscope']
         else:
-            return self._error_message
+            return self._error_message.replace(self.__replace_symbol, response.status_code)
 
 
 if __name__ == "__main__":

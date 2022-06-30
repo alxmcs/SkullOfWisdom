@@ -26,7 +26,7 @@ class VoiceEmitter:
     def play_greeting(self, name):
         if name is None:
             name = self.__unknown
-        self.play_message(np.random.choice(self.__greetings, 1)[0].replace('{x}', name))
+        self.play_message(np.random.choice(self.__greetings, 1)[0].replace(self.__replace_symbol, name))
 
     def play_prophecy(self, lottery):
         if lottery:
@@ -44,7 +44,7 @@ class VoiceEmitter:
 if __name__ == "__main__":
     with open(os.path.join(os.path.dirname(os.getcwd()), 'settings.json'), encoding="utf-8") as json_file:
         settings = json.load(json_file)
-    ve = VoiceEmitter(settings['phrases_list'], settings['unknown_name'],
+    ve = VoiceEmitter(settings['greetings_list'], settings['unknown_name'],
                       settings['replace_symbol'], settings['prophecies_list'])
     ve.play_message(settings['prophecies_list'][-1])
     ve.play_greeting('Лёха')

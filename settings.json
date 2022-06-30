@@ -9,7 +9,7 @@
   "startup_message": "Я родился",
   "shutdown_message": "Счастливо оставаться",
   "stream_error_message": "Мне хуйово",
-  "horoscope_error_message": "Никаких гороскопов сегодня бля",
+  "horoscope_error_message": "Никаких гороскопов сегодня, у меня {x} выпадает. Все, пиздец.",
   "greetings_list": [
     "Привет {x}",
     "{x} здар'ова заеб'ал",
