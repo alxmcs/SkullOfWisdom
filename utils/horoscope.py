@@ -15,7 +15,7 @@ class HoroscopeParser:
         self._error_message = error_message
 
     def request_horoscope(self, sign):
-        with TelegramClient('session_name', self.__api_id, self.__api_hash) as client:
+        with TelegramClient('skull_of_wisdom_session', self.__api_id, self.__api_hash) as client:
             channel_entity = client.get_entity(self.__channel_name)
             post = client(SearchRequest(peer=channel_entity,
                                         limit=1,

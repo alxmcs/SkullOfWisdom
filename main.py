@@ -63,10 +63,9 @@ class StreamWorker:
                     counts[name] = counts.get(name, 0) + 1
                     signs[name] = self.__data["signs"][i]
                 name = max(counts, key=counts.get)
-                sign = signs[name]
-                self.__emitter.play_greeting(name)
+                self.__emitter.play_greeting(name[0])
                 logging.info(f'recognized {name}')
-                self.__emitter.play_message(self.__parser.request_horoscope(sign))
+                self.__emitter.play_message(self.__parser.request_horoscope(name[1]))
             else:
                 self.__emitter.play_greeting(None)
                 logging.info('Unknown person appeared')
