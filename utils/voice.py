@@ -5,10 +5,11 @@ import os
 
 
 class VoiceEmitter:
-    def __init__(self, greetings, unknown, symbol, volume=1.0):
+    def __init__(self, greetings, unknown, symbol, prophesies, volume=1.0):
         self.__greetings = greetings
         self.__unknown = unknown
         self.__replace_symbol = symbol
+        self.__prophesies = prophesies
         if os.name == 'nt':
             self.__engine = pyttsx3.init()
             self.__engine.setProperty('volume', volume)

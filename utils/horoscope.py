@@ -30,7 +30,7 @@ class HoroscopeParser:
                                         hash=0
                                         ))
         if len(post.messages) > 0:
-            return f'Ты {sign}. Твой нейроастрологический прогноз на сегодня: {self.__parse_message(post.messages[0].message, sign)} '
+            return f'Ты {sign}. Твой нейро-астрологический прогноз на сегодня! {self.__parse_message(post.messages[0].message, sign)} '
         else:
             return self._error_message
 
