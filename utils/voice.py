@@ -5,11 +5,10 @@ import os
 
 
 class VoiceEmitter:
-    def __init__(self, greetings, unknown, symbol, prophesies, volume=1.0):
+    def __init__(self, greetings, unknown, symbol, volume=1.0):
         self.__greetings = greetings
         self.__unknown = unknown
         self.__replace_symbol = symbol
-        self.__prophesies = prophesies
         if os.name == 'nt':
             self.__engine = pyttsx3.init()
             self.__engine.setProperty('volume', volume)
@@ -21,25 +20,13 @@ class VoiceEmitter:
             self.__engine.say(text)
             self.__engine.runAndWait()
         else:
-            bash = f'echo \"{text}\" | festival --tts --language russian'
+            bash = f'echo \"{text}\" | festival --tts --language english'
             os.system(bash)
 
     def play_greeting(self, name):
         if name is None:
             name = self.__unknown
         self.play_message(np.random.choice(self.__greetings, 1)[0].replace('{x}', name))
-
-    def play_prophecy(self, lottery):
-        if lottery:
-            index = np.random.choice(len(self.__prophesies), 1)[0]
-            self.play_message(self.__prophesies[index])
-            if index == 0:
-                return False
-            else:
-                return True
-        else:
-            self.play_message(np.random.choice(self.__prophesies[1:], 1)[0])
-            return False
 
 
 if __name__ == "__main__":
@@ -56,4 +43,3 @@ if __name__ == "__main__":
     ve.play_greeting('Паша')
     ve.play_greeting('Артём')
     ve.play_greeting(None)
-    ve.play_prophecy(True)
