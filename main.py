@@ -33,7 +33,8 @@ class StreamWorker:
             self.__data = pickle.loads(file.read())
         logging.info('Encodings read')
 
-        self.__parser = HoroscopeParser(settings['horoscope_channel'], settings['horoscope_error_message'])
+        self.__parser = HoroscopeParser(settings['horoscope_channel'], settings['horoscope_error_message'],
+                                        settings['tg_api_id'], settings['tg_api_hash'])
         logging.info('Api requesting configured')
 
         self.__emitter = VoiceEmitter(settings['greetings_list'], settings['unknown_name'],
@@ -43,7 +44,7 @@ class StreamWorker:
 
         src = 0
         if os.name == 'nt':
-            src = 1
+            src = 0
         self.__vs = VideoStream(src=src).start()
         logging.info('Video stream capture started')
 
@@ -57,14 +58,12 @@ class StreamWorker:
             if True in matches:
                 matched = [i for (i, b) in enumerate(matches) if b]
                 counts = {}
-                signs = {}
                 for i in matched:
                     name = self.__data["names"][i]
-                    counts[name] = counts.get(name, 0) + 1
-                    signs[name] = self.__data["signs"][i]
+                    counts[tuple(name)] = counts.get(tuple(name), 0) + 1
                 name = max(counts, key=counts.get)
                 self.__emitter.play_greeting(name[0])
-                logging.info(f'recognized {name}')
+                logging.info(f'recognized {name[0]}')
                 self.__emitter.play_message(self.__parser.request_horoscope(name[1]))
             else:
                 self.__emitter.play_greeting(None)
