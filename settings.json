@@ -1,9 +1,19 @@
 {
+  "mode": "horoscope",
   "encodings_path": "encodings.pickle",
   "images_path": "images",
   "names_path": "images/names.json",
   "timeout": 5.0,
-  "phrases_list": [
+  "tg_api_id": 0,
+  "tg_api_hash": "0",
+  "horoscope_channel": "https://t.me/neural_horo",
+  "replace_symbol": "{x}",
+  "unknown_name": "Неустановленный пидар'ас",
+  "startup_message": "Я родился",
+  "shutdown_message": "Счастливо оставаться",
+  "stream_error_message": "Мне хуйово",
+  "horoscope_error_message": "Звезды говорят - хуй тебе, а не гороскоп.",
+  "greetings_list": [
     "Привет {x}",
     "{x} здар'ова заеб'ал",
     "Тебе тут не рады {x}",
@@ -38,10 +48,5 @@
     "Победителем становится лишь тот, кто одержал победу. Безумно можно быть пееервым. Парапапапам. Пам.",
     "Мало кто поймет, но кто поймет, тот мало кто. Безумно можно быть пееервым. Парапапапам. Пам.",
     "Женщины они как двери - есть открытые, есть закрытые. А есть домофонные еще. Деревянные бывают, железные. О чём говорил, уже не помню. Просто в магазин дверей зашел недавно, на двери посмотреть. Ладно."
-  ],
-  "replace_symbol": "{x}",
-  "unknown_name": "Неустановленный пидар'ас",
-  "startup_message": "Я родился",
-  "shutdown_message": "Счастливо оставаться",
-  "error_message": "Мне хуйово"
+  ]
 }

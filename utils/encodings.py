@@ -30,9 +30,9 @@ def generate_encodings(image_folder, names_path, encodings_path):
     if os.path.exists(encodings_path) and os.stat(encodings_path).st_size != 0:
         with open(encodings_path, "rb") as pickle_file:
             data = pickle.loads(pickle_file.read())
-        encodings = data["names"]
-        names = data["encodings"]
-        logging.info(f'Got {len(encodings)} encodings for {len(set(np.array(names).flatten()))} people from {encodings_path}')
+        names = [{'name': f[0], 'sign': f[1]} for f in data["names"]]
+        encodings = data["encodings"]
+        logging.info(f'Got {len(encodings)} encodings for {len(set(tuple(f) for f in data["names"]))} people from {encodings_path}')
 
     for (i, image_path) in enumerate(image_paths):
         if os.path.splitext(os.path.basename(image_path))[0] in names_dict.keys():
@@ -50,8 +50,9 @@ def generate_encodings(image_folder, names_path, encodings_path):
                 logging.info(f'Added encoding for {new_name}')
 
     with open(encodings_path, "wb") as pickle_file:
-        pickle.dump({"encodings": encodings, "names": names}, pickle_file)
-    logging.info(f'{len(encodings)} encodings for {len(set(np.array(names).flatten()))} people saved in {encodings_path}')
+        names_list = [[f['name'], f['sign']] for f in names]
+        pickle.dump({"encodings": encodings, "names": names_list}, pickle_file)
+    logging.info(f'{len(encodings)} encodings for {len(set(tuple(f) for f in names_list))} people saved in {encodings_path}')
 
 
 if __name__ == "__main__":
