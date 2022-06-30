@@ -1,25 +1,55 @@
-import requests
 import json
 import os
-from telethon.tl.functions.contacts import ResolveUsernameRequest
+from telethon.sync import TelegramClient
+from telethon.tl.functions.messages import SearchRequest
+from datetime import datetime, timedelta
+import re
+from telethon.tl.types import InputMessagesFilterEmpty
 
-class HoroscopeRequester:
-    def __init__(self, base_url, error_message, replace_symbol):
-        self.__base_url = base_url
-        self.__replace_symbol = replace_symbol
+
+class HoroscopeParser:
+    def __init__(self, channel_name, error_message, api_id, api_hash):
+        self.__channel_name = channel_name
+        self.__api_id = api_id
+        self.__api_hash = api_hash
         self._error_message = error_message
 
     def request_horoscope(self, sign):
-        response = requests.get(f"{self.__base_url}{sign}")
-        if response.status_code == 200:
-            return response.json()['horoscope']
+        with TelegramClient('session_name', self.__api_id, self.__api_hash) as client:
+            channel_entity = client.get_entity(self.__channel_name)
+            post = client(SearchRequest(peer=channel_entity,
+                                        limit=1,
+                                        min_date=datetime.today() - timedelta(days=1),
+                                        max_date=datetime.today(),
+                                        q=sign,
+                                        filter=InputMessagesFilterEmpty(),
+                                        offset_id=0,
+                                        add_offset=0,
+                                        max_id=0,
+                                        min_id=0,
+                                        hash=0
+                                        ))
+        if len(post.messages) > 0:
+            return self.__parse_message(post.messages[0].message, sign)
         else:
-            return self._error_message.replace(self.__replace_symbol, response.status_code)
+            return self._error_message
+
+    def __parse_message(self, message, sign):
+        m = re.search(f'{sign}: (.+?)\n\n', message)
+        if m:
+            return m.group(1)
+        else:
+            return self._error_message
 
 
 if __name__ == "__main__":
     with open(os.path.join(os.path.dirname(os.getcwd()), 'settings.json'), encoding="utf-8") as json_file:
         settings = json.load(json_file)
-    hr = HoroscopeRequester(settings['horoscope_api'], settings['horoscope_error_message'])
-    print(hr.request_horoscope('aquarius'))
-    print(hr.request_horoscope('gemini'))
+    hr = HoroscopeParser(settings['horoscope_channel'], settings['horoscope_error_message'], settings['tg_api_id'],
+                         settings['tg_api_hash'])
+    res = hr.request_horoscope('Близнецы')
+    print(res)
+    res = hr.request_horoscope('Водолей')
+    print(res)
+    res = hr.request_horoscope('Говноед')
+    print(res)

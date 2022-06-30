@@ -1,6 +1,6 @@
 from imutils.video import VideoStream
 from utils.voice import VoiceEmitter
-from utils.horoscope import HoroscopeRequester
+from utils.horoscope import HoroscopeParser
 import face_recognition
 import logging
 import imutils
@@ -33,7 +33,7 @@ class StreamWorker:
             self.__data = pickle.loads(file.read())
         logging.info('Encodings read')
 
-        self.__requester = HoroscopeRequester(settings['horoscope_api'], settings['horoscope_error_message'])
+        self.__parser = HoroscopeParser(settings['horoscope_channel'], settings['horoscope_error_message'])
         logging.info('Api requesting configured')
 
         self.__emitter = VoiceEmitter(settings['greetings_list'], settings['unknown_name'],
@@ -66,7 +66,7 @@ class StreamWorker:
                 sign = signs[name]
                 self.__emitter.play_greeting(name)
                 logging.info(f'recognized {name}')
-                self.__emitter.play_message(self.__requester.request_horoscope(sign))
+                self.__emitter.play_message(self.__parser.request_horoscope(sign))
             else:
                 self.__emitter.play_greeting(None)
                 logging.info('Unknown person appeared')
