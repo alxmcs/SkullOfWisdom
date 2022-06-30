@@ -1,7 +1,7 @@
 import requests
 import json
 import os
-
+from telethon.tl.functions.contacts import ResolveUsernameRequest
 
 class HoroscopeRequester:
     def __init__(self, base_url, error_message):
@@ -21,3 +21,4 @@ if __name__ == "__main__":
         settings = json.load(json_file)
     hr = HoroscopeRequester(settings['horoscope_api'], settings['horoscope_error_message'])
     print(hr.request_horoscope('aquarius'))
+    print(hr.request_horoscope('gemini'))

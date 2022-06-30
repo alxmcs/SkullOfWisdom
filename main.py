@@ -36,7 +36,7 @@ class StreamWorker:
         self.__requester = HoroscopeRequester(settings['horoscope_api'], settings['horoscope_error_message'])
         logging.info('Api requesting configured')
 
-        self.__emitter = VoiceEmitter(settings['phrases_list'], settings['unknown_name'],
+        self.__emitter = VoiceEmitter(settings['greetings_list'], settings['unknown_name'],
                                       settings['replace_symbol'], settings['prophecies_list'])
         self.__emitter.play_message(settings['startup_message'])
         logging.info('Text-to-speech initialized')
