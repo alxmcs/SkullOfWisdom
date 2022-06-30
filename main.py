@@ -48,7 +48,51 @@ class StreamWorker:
         self.__vs = VideoStream(src=src).start()
         logging.info('Video stream capture started')
 
-    def process_frame(self, frame):
+        self.__mode = settings['mode']
+
+    def process_frame_lottery(self, frame, lottery):
+        result = lottery
+        boxes = face_recognition.face_locations(frame)
+        encodings = face_recognition.face_encodings(frame, boxes)
+        if boxes is not None and len(boxes) != 0:
+            logging.info(f'got {len(boxes)} faces')
+        for encoding in encodings:
+            matches = face_recognition.compare_faces(self.__data["encodings"], encoding)
+            if True in matches:
+                matched = [i for (i, b) in enumerate(matches) if b]
+                counts = {}
+                for i in matched:
+                    name = self.__data["names"][i]
+                    counts[name] = counts.get(name, 0) + 1
+                name = max(counts, key=counts.get)
+                self.__emitter.play_greeting(name)
+                logging.info(f'recognized {name}')
+            else:
+                self.__emitter.play_greeting(None)
+                logging.info('Unknown person appeared')
+            result = self.__emitter.play_prophecy(lottery)
+            logging.info(f'Lottery is enabled: {result}')
+        return result
+
+    def process_stream_lottery(self):
+        lottery = True
+        time.sleep(2.0)
+        logging.info('Began face recognition loop')
+        while True:
+            try:
+                frame = self.__vs.read()
+                lottery = self.process_frame_lottery(imutils.resize(frame, width=500), lottery)
+                time.sleep(self.__timeout)
+            except KeyboardInterrupt:
+                self.__emitter.play_message(self._shutdown_message)
+                logging.info('Stopped face recognition loop')
+                break
+            except Exception as ex:
+                self.__emitter.play_message(self._error_message)
+                logging.error(f'Exception happened during face recognition loop: {ex}')
+                break
+
+    def process_frame_horoscope(self, frame):
         boxes = face_recognition.face_locations(frame)
         encodings = face_recognition.face_encodings(frame, boxes)
         if boxes is not None and len(boxes) != 0:
@@ -69,13 +113,13 @@ class StreamWorker:
                 self.__emitter.play_greeting(None)
                 logging.info('Unknown person appeared')
 
-    def process_stream(self):
+    def process_stream_horoscope(self):
         time.sleep(2.0)
         logging.info('Began face recognition loop')
         while True:
             try:
                 frame = self.__vs.read()
-                self.process_frame(imutils.resize(frame, width=500))
+                self.process_frame_horoscope(imutils.resize(frame, width=500))
                 time.sleep(self.__timeout)
             except KeyboardInterrupt:
                 self.__emitter.play_message(self._shutdown_message)
@@ -86,7 +130,17 @@ class StreamWorker:
                 logging.error(f'Exception happened during face recognition loop: {ex}')
                 break
 
+    def run(self):
+        if self.__mode == 'horoscope':
+            logging.info('Running horoscope')
+            self.process_stream_horoscope()
+        elif self.__mode == 'lottery':
+            logging.info('Running lottery')
+            self.process_stream_lottery()
+        else:
+            logging.exception('No mode was set to run this shit')
+
 
 if __name__ == "__main__":
     butler = StreamWorker(SETTINGS_PATH)
-    butler.process_stream()
+    butler.run()
