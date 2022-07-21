@@ -13,6 +13,7 @@
   "shutdown_message": "Счастливо оставаться",
   "stream_error_message": "Мне хуйово",
   "horoscope_error_message": "Звезды говорят - хуй тебе, а не гороскоп.",
+  "no_encodings_error_message": "У тебя энк'одингов нет, в курсе?",
   "greetings_list": [
     "Привет {x}",
     "{x} здар'ова заеб'ал",
