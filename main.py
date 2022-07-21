@@ -29,10 +29,6 @@ class StreamWorker:
         self._stream_error_message = settings['stream_error_message']
         logging.info('Settings read')
 
-        with open(settings['encodings_path'], "rb") as file:
-            self.__data = pickle.loads(file.read())
-        logging.info('Encodings read')
-
         self.__parser = HoroscopeParser(settings['horoscope_channel'], settings['horoscope_error_message'],
                                         settings['tg_api_id'], settings['tg_api_hash'])
         logging.info('Api requesting configured')
@@ -42,6 +38,14 @@ class StreamWorker:
         self.__emitter.play_message(settings['startup_message'])
         logging.info('Text-to-speech initialized')
 
+        if os.path.exists(settings['encodings_path']):
+            with open(settings['encodings_path'], "rb") as file:
+                self.__data = pickle.loads(file.read())
+            logging.info('Encodings read')
+        else:
+            logging.info('No encoding found')
+            self.__emitter.play_message(settings['no_encodings_error_message'])
+            return
         src = 0
         if os.name == 'nt':
             src = 0
@@ -111,6 +115,7 @@ class StreamWorker:
                 self.__emitter.play_message(self.__parser.request_horoscope(name[1]))
             else:
                 self.__emitter.play_greeting(None)
+                self.__emitter.play_message(self.__parser._error_message)
                 logging.info('Unknown person appeared')
 
     def process_stream_horoscope(self):
