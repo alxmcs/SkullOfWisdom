@@ -66,11 +66,11 @@ class StreamWorker:
                 matched = [i for (i, b) in enumerate(matches) if b]
                 counts = {}
                 for i in matched:
-                    name = self.__data["names"][i]
+                    name = tuple(self.__data["names"][i])
                     counts[name] = counts.get(name, 0) + 1
                 name = max(counts, key=counts.get)
-                self.__emitter.play_greeting(name)
-                logging.info(f'recognized {name}')
+                self.__emitter.play_greeting(name[0])
+                logging.info(f'recognized {name[0]}')
             else:
                 self.__emitter.play_greeting(None)
                 logging.info('Unknown person appeared')
@@ -92,7 +92,7 @@ class StreamWorker:
                 logging.info('Stopped face recognition loop')
                 break
             except Exception as ex:
-                self.__emitter.play_message(self._error_message)
+                self.__emitter.play_message(self._stream_error_message)
                 logging.error(f'Exception happened during face recognition loop: {ex}')
                 break
 
@@ -107,8 +107,8 @@ class StreamWorker:
                 matched = [i for (i, b) in enumerate(matches) if b]
                 counts = {}
                 for i in matched:
-                    name = self.__data["names"][i]
-                    counts[tuple(name)] = counts.get(tuple(name), 0) + 1
+                    name = tuple(self.__data["names"][i])
+                    counts[name] = counts.get(name, 0) + 1
                 name = max(counts, key=counts.get)
                 self.__emitter.play_greeting(name[0])
                 logging.info(f'recognized {name[0]}')
