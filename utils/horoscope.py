@@ -3,8 +3,8 @@ import re
 import json
 from datetime import datetime, timedelta
 from telethon.sync import TelegramClient
-from telethon.tl.functions.messages import SearchRequest
 from telethon.tl.types import InputMessagesFilterEmpty
+from telethon.tl.functions.messages import SearchRequest
 
 
 class HoroscopeParser:
