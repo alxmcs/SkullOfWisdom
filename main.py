@@ -10,7 +10,7 @@ import time
 import sys
 import os
 
-SETTINGS_PATH = 'settings.json'
+SETTINGS_PATH = 'settings.json' 
 
 
 class StreamWorker:
