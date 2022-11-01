@@ -1,6 +1,6 @@
+from utils.horoscope import HoroscopeParser
 from imutils.video import VideoStream
 from utils.voice import VoiceEmitter
-from utils.horoscope import HoroscopeParser
 import face_recognition
 import logging
 import imutils
