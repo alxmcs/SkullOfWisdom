@@ -1,3 +1,4 @@
+import os
 import json
 import unittest
 from utils.horoscope import HoroscopeParser
@@ -5,7 +6,7 @@ from utils.horoscope import HoroscopeParser
 
 class HoroscopeParserTestCase(unittest.TestCase):
 
-    __settings_path = 'test_settings.json'
+    __settings_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_settings.json')
 
     def setUp(self):
         with open(HoroscopeParserTestCase.__settings_path, encoding="utf-8") as json_file:
