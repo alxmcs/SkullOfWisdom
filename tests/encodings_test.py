@@ -1,7 +1,7 @@
 import os
 import json
 import unittest
-from utils.encodings import
+from utils.encodings import FaceEncoder
 
 
 class FaceEncoderTestCase(unittest.TestCase):
@@ -9,18 +9,26 @@ class FaceEncoderTestCase(unittest.TestCase):
     __settings_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_settings.json')
 
     def setUp(self):
-        with open(HoroscopeParserTestCase.__settings_path, encoding="utf-8") as json_file:
+        with open(FaceEncoderTestCase.__settings_path, encoding="utf-8") as json_file:
             self.settings = json.load(json_file)
-        self.horoscope_parser = HoroscopeParser(self.settings['horoscope_channel'],
-                                                self.settings['horoscope_error_message'],
-                                                self.settings['tg_api_id'],
-                                                self.settings['tg_api_hash'])
+        self.horoscope_parser = FaceEncoder(self.settings['images_path'],
+                                            self.settings['names_path'],
+                                            self.settings['encodings_path'])
 
-    def test_request_horoscope_correct_sign(self):
-        self.assertNotEqual(self.horoscope_parser._error_message, self.horoscope_parser.request_horoscope('Рак'))
+    def test_get_new_images(self):
+        pass
 
-    def test_request_horoscope_wrong_sign(self):
-        self.assertEqual(self.horoscope_parser._error_message, self.horoscope_parser.request_horoscope('Wrong sign'))
+    def test_get_new_metadata(self):
+        pass
+
+    def test_get_encodings_data(self):
+        pass
+
+    def test_generate_encodings(self):
+        pass
+
+    def test_write_encodings(self):
+        pass
 
 
 if __name__ == '__main__':

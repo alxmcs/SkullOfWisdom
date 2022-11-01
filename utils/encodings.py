@@ -62,7 +62,7 @@ class FaceEncoder:
                      f'for {len(set(tuple(f) for f in names_list))} people '
                      f'saved in {encodings_path}')
 
-    def generate_encodings(self):
+    def generate_encodings(self, encodings_path=None):
         encodings, names = self._get_encodings_data()
         metadata = self._get_new_metadata()
         images = self._get_new_images()
@@ -80,7 +80,7 @@ class FaceEncoder:
                     encodings.append(encoding)
                     names.append(new_person)
                     logging.info(f'Added encoding for {new_person}')
-        self._write_encodings(encodings, names)
+        self._write_encodings(encodings, names, encodings_path)
 
 
 if __name__ == "__main__":

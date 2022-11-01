@@ -1,5 +1,5 @@
 {
   "encodings_path": "encodings.pickle",
   "images_path": "images",
-  "names_path": "images/names.json",
+  "names_path": "images/names.json"
 }
