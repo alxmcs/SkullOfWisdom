@@ -19,7 +19,7 @@ class HoroscopeParserTestCase(unittest.TestCase):
         self.assertNotEqual(self.horoscope_parser._error_message, self.horoscope_parser.request_horoscope('Рак'))
 
     def test_request_horoscope_wrong_sign(self):
-        self.assertEqual(self.horoscope_parser._error_message, self.horoscope_parser.request_horoscope('Краб'))
+        self.assertEqual(self.horoscope_parser._error_message, self.horoscope_parser.request_horoscope('Wrong sign'))
 
 
 if __name__ == '__main__':
