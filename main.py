@@ -16,10 +16,11 @@ SETTINGS_PATH = 'settings.json'
 class StreamWorker:
     def __init__(self, settings_path):
         logging.basicConfig(handlers=[logging.StreamHandler(sys.stdout),
-                                      logging.FileHandler(filename="VideoStream.log", encoding='utf-8', mode='a+')],
-                            format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
-                            datefmt="%m/%d/%Y %I:%M:%S",
-                            level=logging.INFO)
+                                      logging.FileHandler(
+                                        filename="VideoStream.log", encoding='utf-8', mode='a+')],
+                                        format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
+                                        datefmt="%m/%d/%Y %I:%M:%S",
+                                        level=logging.INFO)
         logging.info('Began initialization')
 
         with open(settings_path, encoding="utf-8") as json_file:

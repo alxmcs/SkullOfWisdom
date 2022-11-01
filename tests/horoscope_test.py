@@ -1,10 +1,10 @@
 import os
 import json
 import unittest
-from utils.horoscope import HoroscopeParser
+from utils.encodings import
 
 
-class HoroscopeParserTestCase(unittest.TestCase):
+class FaceEncoderTestCase(unittest.TestCase):
 
     __settings_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_settings.json')
 
