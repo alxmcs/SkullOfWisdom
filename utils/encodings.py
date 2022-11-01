@@ -28,12 +28,12 @@ class FaceEncoder:
         logging.info(f'got path to encodings pickle - {self.__encodings_path}')
 
     def _get_new_images(self):
-        image_paths = [p for p in paths.list_images(self.__images_path) if os.path.splitext(p)[1] in self.__extensions]
-        logging.info(f'Got {len(image_paths)} paths to new images')
-        return image_paths
+        images = [p for p in paths.list_images(self.__new_images_path) if os.path.splitext(p)[1] in self.__extensions]
+        logging.info(f'Got {len(images)} paths to new images')
+        return images
 
     def _get_new_names(self):
-        with open(self.__names_path, encoding='utf-8') as json_file:
+        with open(self.__new_names_path, encoding='utf-8') as json_file:
             names_dict = json.load(json_file)
         logging.info(f'Got metadata of {len(names_dict)} new faces')
         return names_dict
