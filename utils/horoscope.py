@@ -1,10 +1,10 @@
-import json
-import os
-from telethon.sync import TelegramClient
-from telethon.tl.functions.messages import SearchRequest
-from datetime import datetime, timedelta
 import re
+import os
+import json
+from datetime import datetime, timedelta
+from telethon.sync import TelegramClient
 from telethon.tl.types import InputMessagesFilterEmpty
+from telethon.tl.functions.messages import SearchRequest
 
 
 class HoroscopeParser:
