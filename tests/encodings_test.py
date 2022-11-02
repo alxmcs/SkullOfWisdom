@@ -36,13 +36,18 @@ class FaceEncoderTestCase(unittest.TestCase):
         self.assertEqual("Don't care", metadata['test_image']['sign'])
 
     def test_get_encodings_data(self):
-        pass
-
-    def test_generate_encodings(self):
-        pass
-
-    def test_write_encodings(self):
-        pass
+        encodings, metadata = self.__face_encoder._get_encodings_data()
+        self.assertIsNotNone(encodings)
+        self.assertEqual(1, len(encodings))
+        self.assertEqual(0, encodings[0])
+        self.assertIsNotNone(metadata)
+        self.assertEqual(1, len(metadata))
+        self.assertIsNotNone(metadata[0])
+        self.assertEqual(2, len(list(metadata[0].keys())))
+        self.assertEqual('name', list(metadata[0].keys())[0])
+        self.assertEqual('sign', list(metadata[0].keys())[1])
+        self.assertEqual('test_name', metadata[0]['name'])
+        self.assertEqual('test_sigh', metadata[0]['sign'])
 
 
 if __name__ == '__main__':
