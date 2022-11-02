@@ -34,9 +34,9 @@ class FaceEncoder:
 
     def _get_new_metadata(self):
         with open(self.__new_metadata_path, encoding='utf-8') as json_file:
-            names_dict = json.load(json_file)
-        logging.info(f'Got metadata of {len(names_dict)} new faces')
-        return names_dict
+            metadata_dict = json.load(json_file)
+        logging.info(f'Got metadata of {len(metadata_dict)} new faces')
+        return metadata_dict
 
     def _get_encodings_data(self):
         if os.path.exists(self.__encodings_path) and os.stat(self.__encodings_path).st_size != 0:
